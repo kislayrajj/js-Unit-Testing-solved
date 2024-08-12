@@ -10,7 +10,7 @@ import {
   isValidUsername,
   Stack,
   validateUserInput,
-} from "../core";
+} from "../src/core";
 
 describe("getCoupons", () => {
   it("should return an array of coupons", () => {

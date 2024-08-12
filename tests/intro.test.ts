@@ -1,5 +1,5 @@
 import { it, expect, describe } from "vitest";
-import { fizzBuzz, max } from "../intro";
+import { fizzBuzz, max } from "../src/intro";
 describe("max", () => {
   it("should return first argument if it greater", () => {
     // // vitest followS AAA
