@@ -1,9 +1,10 @@
 import { it, expect, describe, vi } from "vitest";
 import { getExchangeRate } from "../src/libs/currency";
-import { getPriceInCurrency } from "../src/mocking";
-import { send } from "vite";
+import { getPriceInCurrency, getShippingInfo } from "../src/mocking";
+import { getShippingQuote } from "../src/libs/shipping";
 
 vi.mock("../src/libs/currency");
+vi.mock("../src/libs/shipping.js");
 
 describe("mocking test", () => {
   it(" exemplary test case", () => {
@@ -13,8 +14,6 @@ describe("mocking test", () => {
     // greet.mockReturnValue("Hello")
     // greet.mockReturnValue("Hello")
     // const result = greet()
-    // console.log("👁️ -> it -> result:", result)
-
     // mockResolvedValue to get promise
     // greet.mockResolvedValue("Hello")
     // greet().then((result: string) => console.log(result))
@@ -49,3 +48,21 @@ describe("getPriceInCurrency", () => {
     expect(price).toBe(15);
   });
 });
+
+describe('getShippingInfo', () => {
+  it('should return unavailable', () => {
+    vi.mocked(getShippingQuote).mockReturnValue(null)
+    const result = getShippingInfo("New York")
+    expect(result).toMatch(/unavailable/i)
+  })
+  it('should return shipping info when destination is found', () => {
+    vi.mocked(getShippingQuote).mockReturnValue({cost: 300, estimatedDays:2})
+    const result = getShippingInfo("Delhi")
+    expect(result).toMatch("$300")
+    expect(result).toMatch(/2 days/i)
+
+    //or
+
+    expect(result).toMatch(/shipping cost: \$300 \(2 days\)/i)
+  })
+})
